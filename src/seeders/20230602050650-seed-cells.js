@@ -1,0 +1,61 @@
+module.exports = {
+  up: (queryInterface) => queryInterface.bulkInsert('Cells', [
+    {
+      type: 'propiedad',
+      gameId: 1,
+      position: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: null,
+      gameId: 1,
+      position: 2,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: 'propiedad',
+      gameId: 1,
+      position: 3,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: null,
+      gameId: 1,
+      position: 4,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: null,
+      gameId: 1,
+      position: 5,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: null,
+      gameId: 1,
+      position: 6,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: null,
+      gameId: 1,
+      position: 7,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      type: 'propiedad',
+      gameId: 1,
+      position: 8,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ]),
+  down: (queryInterface) => queryInterface.bulkDelete('Cells', null, {}),
+};

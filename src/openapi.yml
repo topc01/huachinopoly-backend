@@ -1,0 +1,732 @@
+openapi: '3.0.3'
+info:
+  title: Grupo Huachipato
+  description: API del proyecto de Tecnologías y Aplicaciones Web
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local server
+  - url: https://grupo-huachipato-backend.herokuapp.com
+    description: Heroku server
+paths:
+  /api-docs:
+    get:
+      summary: Swagger UI
+      description: Swagger UI
+      responses:
+        200:
+          description: Swagger UI
+
+  /game:
+    get:
+      summary: Get all games
+      description: Get all games
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: Get all games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+    post:
+      summary: Create a game
+      description: Create a game, with default cells, properties and cards
+      responses:
+        201:
+          description: Game created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+  
+  /game/{game_id}/join/{user_id}:
+    post:
+      summary: Join a game
+      description: Join a game
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: integer
+          required: true
+          description: Game id
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: User id
+        - in: body
+          name: name
+          schema:
+            type: application/json
+            properties:
+              name:
+                type: string
+
+          required: true
+          description: Player name
+      responses:
+        201:
+          description: Player joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  player:
+                    $ref: '#/components/schemas/Player'
+                  game:
+                    $ref: '#/components/schemas/Game'
+        208:
+          description: Player already joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    value: User already in game
+
+  /game/{game_id}/turn:
+    get:
+      summary: Get player in turn
+      description: Get player in turn
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: integer
+          required: true
+          description: Game id
+      responses:
+        200:
+          description: Player in turn
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+        204:
+          description: Player in turn is in jail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Player in jail
+                  player:
+                    $ref: '#/components/schemas/Player'
+
+  /game/{game_id}/start:
+    post:
+      summary: Start a game
+      description: Start a game
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: integer
+          required: true
+          description: Game id
+      responses:
+        200:
+          description: Game started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+  
+  /game/{game_id}:
+    delete:
+      summary: Delete a game
+      description: Delete a game
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: integer
+          required: true
+          description: Game id to delete
+      responses:
+        200:
+          description: Game deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+
+  /game/{game_id}/players:
+    get:
+      summary: Get all players in a game
+      description: Get all players in a game
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: integer
+          required: true
+          description: Game id
+      responses:
+        200:
+          description: Get all players in a game
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+  /player/{id}:
+    delete:
+      summary: Delete a player
+      description: Delete a player
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Player id to delete
+      responses:
+        200:
+          description: Player deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+
+  /player:
+    get:
+      summary: Get all players
+      description: Get all players
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: Get all players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+  /player/{id}:
+    get:
+      summary: Get a player
+      description: Get a player
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Player id
+      responses:
+        200:
+          description: Get a player
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+
+  /player/user/{id}:
+    get:
+      summary: Get all players of user id
+      description: Get all players of user id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: User id
+      responses:
+        200:
+          description: Players of user id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+
+  /player/{id}/{newPos}:
+    put:
+      summary: Update player position
+      description: Update player position
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Player id
+        - in: path
+          name: newPos
+          schema:
+            type: integer
+          required: true
+          description: New player position
+      responses:
+        200:
+          description: Player landed in available property
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Comprar propiedad
+                  property:
+                    $ref: '#/components/schemas/Property'
+        201:
+          summary: Player landed in owned property
+          decription: Player pays rent to owner of property
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Pagar renta
+                  property:
+                    $ref: '#/components/schemas/Property'
+                  owner:
+                    $ref: '#/components/schemas/Player'
+        202:
+          summary: Player landed in card cell
+          decription: Player draws a random card
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Carta
+                  card:
+                    $ref: '#/components/schemas/Card'
+                  player:
+                    $ref: '#/components/schemas/Player'
+        203:
+          summary: Player landed in jail
+          decription: Player jail value is set to true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Carcel
+                  player:
+                    $ref: '#/components/schemas/Player'
+        204:
+          summary: Player landed in visit jail
+          decription: Player jail value is set to true and player position is set to 10
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Visita a la carcel
+                  player:
+                    $ref: '#/components/schemas/Player'
+
+  /player/{id}/buy/{property_id}:
+    put:
+      summary: Buy property
+      description: Buy property
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Player id
+        - in: path
+          name: property_id
+          schema:
+            type: integer
+          required: true
+          description: Property id
+      responses:
+        200:
+          description: Property bought
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    value: Propiedad comprada
+                  propertyBought:
+                    $ref: '#/components/schemas/Property'
+                  playerOwner:
+                    $ref: '#/components/schemas/Player'
+        # 201:
+        #   summary: Property not bought
+        #   decription: Player does not have enough money to buy property
+        #   content:
+        #     application/json:
+        #       schema:
+        #         type: object
+        #         properties:
+        #           message: 
+        #             type: string
+        #             value: No tienes suficiente dinero
+        #           property:
+        #             $ref: '#/components/schemas/Property'
+        #           player:
+        #             $ref: '#/components/schemas/Player'
+
+  /player/{id}/properties:
+    get:
+      summary: Get all properties owned by player
+      description: Get all properties owned by player
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Player id
+      responses:
+        200:
+          description: Get all properties owned by player
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+
+  # /property:
+  #   get:
+  #     summary: Get all properties
+  #     description: Returns all properties in database
+  #     responses:
+  #       200:
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#components/schemas/Property'
+
+    # post:
+    #   summary: Make new property
+    #   description: Create a new property
+    #   parameters:
+    #     - in: body
+    #       name: property
+    #       schema:
+    #         type: object
+    #         properties:
+    #           position:
+    #             type: integer
+    #           name:
+    #             type: string
+    #           value:
+    #             type: integer
+    #           rent:
+    #             type: integer
+    #       required: true
+    #   responses:
+    #     201:
+    #       description: Property created
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#components/schemas/Property'
+
+  /signup:
+    post:
+      summary: Create new user
+      description: Add a new user to database
+      parameters:
+        - in: body
+          name: user data
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              mail:
+                type: string
+              password:
+                type: string
+          required: true
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  mail:
+                    type: string
+
+  /login:
+    post:
+      summary: Login user
+      description: Login user
+      parameters:
+        - in: body
+          name: user data
+          schema:
+            type: object
+            properties:
+              mail:
+                type: string
+              password:
+                type: string
+          required: true
+      responses:
+        200:
+          description: User logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    value: Bearer
+                  expires_in:
+                    type: integer
+                    value: 86400
+
+
+  # /user:
+  #   get:
+  #     summary: Get all users
+  #     description: Return all users in database
+  #     responses:
+  #       200:
+  #         description: Array of users
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#components/schemas/User'
+  #   post:
+  #     summary: Create new user
+  #     description: Add a new user to database
+  #     parameters:
+  #       - in: body
+  #         name: user data
+  #         schema:
+  #           type: application/json
+  #           properties:
+  #             username:
+  #               type: string
+  #             mail:
+  #               type: string
+  #             password:
+  #               type: string
+  #         required: true
+  #     responses:
+  #       200:
+  #         description: New user added
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#components/schemas/User'
+        
+
+         
+        
+
+
+
+definitions:
+  GameParams:
+    type: applications/json
+    properties:
+      initial_balance:
+        type: integer
+      players:
+        type: array
+        items:
+          type: int
+      
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - mail
+        - password
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+        mail:
+          type: string
+        password:
+          type: string
+          format: password
+          example: $12c#8UaFfj
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+
+    Game:
+      type: object
+      required:
+        - initial_balance
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        initial_balance:
+          type: integer
+        turn:
+          type: integer
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+        length:
+          type: integer
+        started:
+          type: boolean
+        
+
+    Cell:
+      type: object
+      required:
+        - gameId
+        - type
+        - position
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        gameId:
+          type: integer
+        type:
+          type: string
+        position:
+          type: integer
+
+    Player:
+      type: object
+      required:
+        - userId
+        - name
+        - gameId
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        userId:
+          type: integer
+        name:
+          type: string
+        gameId:
+          type: integer
+        balance:
+          type: integer
+        position:
+          type: integer
+        jail:
+          type: boolean
+
+    Property:
+      type: object
+      required:
+        - name
+        - value
+        - rent
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        playerId:
+          type: integer
+        position:
+          type: integer
+        name:
+          type: string
+        value:
+          type: integer
+        rent:
+          type: integer
+
+    Card:
+      type: object
+      required:
+        - description
+        - value
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        description:
+          type: string
+        value:
+          type: int
+
+    
+

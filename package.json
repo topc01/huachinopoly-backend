@@ -1,0 +1,49 @@
+{
+  "name": "grupo-huachipato-backend",
+  "version": "1.0.0",
+  "description": "backend del proyecto de tecnologias y aplicaciones web",
+  "main": "index.js",
+  "type": "commonjs",
+  "repository": "https://topc01@github.com/IIC2513/grupo-huachipato-backend.git",
+  "author": "topc01 <tpfingsthorn1@uc.cl>",
+  "license": "MIT",
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "koa": "^2.14.2",
+    "koa-body": "^6.0.1",
+    "koa-jwt": "^4.0.4",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^12.0.0",
+    "koa2-swagger-ui": "^5.8.0",
+    "nodemon": "^2.0.22",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.1",
+    "sequelize-cli": "^6.6.0",
+    "swagger2": "^4.0.3",
+    "swagger2-koa": "^4.0.0",
+    "yamljs": "^0.3.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "deploy": "yarn install && yarn db:drop && yarn db:create && yarn db:migrate",
+    "pkg": "yarn add @koa/cors dotenv koa koa-body koa-logger koa-router nodemon pg pg-hstore sequelize sequelize-cli",
+    "db:create": "sequelize db:create",
+    "db:drop": "sequelize db:drop",
+    "db:migrate": "sequelize db:migrate",
+    "db:migrate:undo": "yarn sequelize db:migrate:undo:all",
+    "db:reset": "yarn db:migrate:undo && yarn db:migrate"
+  },
+  "optionalDependencies": {
+    "fsevents": "2.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2"
+  }
+}

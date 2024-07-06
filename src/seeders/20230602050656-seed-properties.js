@@ -1,0 +1,38 @@
+module.exports = {
+  up: (queryInterface) => queryInterface.bulkInsert('Properties', [
+    {
+      cellId: null,
+      playerId: null,
+      hotel_value: 50_000,
+      house_value: 20_000,
+      hotel_rent: 35_000,
+      house_rent: 15_000,
+      name: 'Paris',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      cellId: null,
+      playerId: null,
+      hotel_value: 35_000,
+      house_value: 10_000,
+      hotel_rent: 20_000,
+      house_rent: 5_000,
+      name: 'Bogota',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      cellId: null,
+      playerId: null,
+      hotel_value: 20_000,
+      house_value: 8_000,
+      hotel_rent: 12_000,
+      house_rent: 3_000,
+      name: 'Santiago',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ]),
+  down: (queryInterface) => queryInterface.bulkDelete('Properties', null, {}),
+};
